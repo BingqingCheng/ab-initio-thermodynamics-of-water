@@ -1,0 +1,13 @@
+This NN potential was fitted using the data in the folder /training-set/ 
+
+I fitted the NNP using the parameters specified in input.nn using the code RuNNer.
+
+One can run MD simulations with the NNP by:
+
+1. Download the neural network potential code N2P2 from 
+https://github.com/CompPhysVienna/n2p2
+
+2. Install the lammps NNP pairstyle as instructed
+
+3. Run MD simulations using the sample input files in the folder ./MD-sample/. You need to copy all the files specify the NNP into that folder.
+

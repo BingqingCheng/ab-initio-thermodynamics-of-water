@@ -1,0 +1,13 @@
+This folder contains sub-folders each includes a set of input files for different steps in computing the absolute Gibbs free energy of an ice structure.
+
+Step 0:
+
+copy the contents from the directory ../NN-potential/ in order to run simulations using the NN potential
+
+Steps:
+
+* Run minimization first
+* Copy the output (geometrically optimized configurations) to the harmonic analysis folder, and run harmonic analysis
+* Copy the Hessian matrices generated from harmonic analysis, as well as the geometrically optimized configurations to the ti-wrt-lambda folder. Run TI at different values of lambda.
+
+* Run md simulations at different temperature, in order to do TI w.r.t. temperature.

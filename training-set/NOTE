@@ -1,0 +1,12 @@
+the training set for ML potentials.
+
+1593 bulk liquid water configurations +  energy + forces
+
+* input.data: the format for training neural network potentials. For the format and the training, see:
+https://github.com/CompPhysVienna/n2p2
+
+* dataset_1593.xyz:  in libatom format. This format is suitable for training GAP potential for example. 
+For the libatom format, see:
+www.libatom.org
+
+

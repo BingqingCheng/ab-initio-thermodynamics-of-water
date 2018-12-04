@@ -1,0 +1,16 @@
+This folder contains the input files for running interface pinning calculations.
+
+You will need to use a lammps code patched with PLUMMED.
+
+data.iceih-big is a proton-disordered ice Ih structure.
+
+Steps:
+
+* Substite the string "ttttt" with desired temperature.
+
+* Run 
+lmp < in.lmp 
+this simulation also dumps out restart files, which contains the coordinates solid-liquid coesistent systems.
+
+* With the restart.sl file, one can continue the interface pinning simulations by 
+lmp < continue.lmp

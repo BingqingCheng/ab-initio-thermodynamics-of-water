@@ -1,0 +1,3 @@
+This folder contains all the neccesary CP2K inputs for generating revPBE0-D3 DFT results for bulk liquid water systems containing 64 molecules.
+
+For highly ordered ice systems one might want to increase the planewave cutoff.

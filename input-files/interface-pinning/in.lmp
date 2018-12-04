@@ -1,0 +1,110 @@
+###############################################################################
+# MD simulation for revPBE0-D3 H2O with NN potential
+###############################################################################
+
+###############################################################################
+# VARIABLES
+###############################################################################
+clear
+variable dt              equal  0.0005                                                   # timestep (ps)
+variable intThermo       equal  1                                                       # screen output interval (timesteps)
+variable numSteps        equal  4000000                                                    # total number of simulation timesteps (timesteps)
+variable runnerCutoff    equal  6.3501269880                                            # largest symmetry function cutoff (Angstrom)
+variable mass2           equal  15.9994                                                 # mass for element 1 (O)  (g/mol)
+variable mass1           equal  1.0080                                                  # mass for element 2 (H) (g/mol)
+variable nameStartCfg    string "data.iceih-big"                				# name of the starting configuration file
+variable runnerDir       string "."	                        # directory containing RuNNer files
+# set initial velocity distribution
+variable initTemp        equal  ttttt                                                   # initial temperature (K)
+variable velSeed         equal  498ttttt9                                                 # seed for random number generator
+# NVT integrator (Nose-Hoover)
+variable startTemp       equal  ttttt                                                   # starting temperature for thermostat (K)
+variable stopTemp        equal  ttttt                                                   # final temperature for thermostat (K)
+variable tDamp           equal  0.02                                                    # thermostat damping factor (ps)
+# dump thermodynamic properties (temperature, pressure, potential energy, kinetic energy, integrator quantity)
+variable intTD           equal  10                                                      # thermodynamics dump file interval (timesteps)
+variable nameTD          string "traj/td"                                               # thermodynamics file name
+variable varVolume       equal  vol                                                     # variable required to print volume
+variable varKE           equal  ke                                                      # variable required to print kinetic energy
+###############################################################################
+# SETUP
+###############################################################################
+units metal                                                                             # define unit system (metal = Angstrom, eV, ps, g/mol)
+boundary p p p                                                                          # set periodic boundary conditions
+atom_style atomic                                                                       # set atomic style for particles
+read_data ${nameStartCfg}                                                               # read start configuration
+mass 1 ${mass1}                                                                         # set mass for element 1
+mass 2 ${mass2}          
+
+#
+change_box all x final 0.0 CELLX y final 0.0 CELLY remap
+### SIMULATION STARTS HERE ###
+change_box all z scale 1.00 remap
+
+replicate 1 1 2
+
+neighbor       7.0 bin          # neighbor list skin width
+neigh_modify   every 1 delay 0 check yes # frequency to update neighor list
+# Write initial data file
+#write_data ./init.data
+
+# Regions and group
+region zcenter block 0 INF 0 INF $(lz/3) $(2*lz/3) side in units box
+group ice region zcenter
+group water subtract all ice
+
+pair_style nnp dir ${runnerDir} showew no showewsum 1000 resetew yes maxew 200 cflength 1.8897261328 cfenergy 0.0367493254
+pair_coeff * * ${runnerCutoff}                                                          # set up pair style coefficients
+timestep ${dt}                                                                          # set timestep
+#velocity all create ${initTemp} ${velSeed}                                              # create initial velocities
+#fix AVE_TD all ave/time ${intTD} 1 ${intTD} c_thermo_temp c_thermo_press v_varVolume c_thermo_pe v_varKE f_INT file ${nameTD} mode scalar       # set up thermodynamic properties output
+thermo ${intThermo}                                                                     # set screen output
+###############################################################################
+# SIMULATION
+###############################################################################
+
+#dump            traj_xyz all custom 50 out.lammpstrj element x y z
+#dump_modify     traj_xyz element H O sort id
+
+# melt the ice first
+velocity        water create 600 2148459 rot yes mom yes dist gaussian # assign initial velocities to the particles
+fix             1 water npt temp 500.0 400.0 ${tDamp} z 1.0 1.0 10.0
+run             5000
+unfix           1
+
+velocity        ice create 200 2148459 rot yes mom yes dist gaussian
+# equilibrate
+fix             2 ice nvt temp ${startTemp} ${stopTemp} ${tDamp}
+run             100
+unfix           2
+
+fix             2 water nvt temp ${startTemp} ${stopTemp} ${tDamp}
+run             100
+unfix           2
+
+fix 1 all nvt temp ${startTemp} ${stopTemp} ${tDamp}
+run            1000
+unfix          1
+
+write_restart   restart.sl
+
+fix             1 all npt temp ${startTemp} ${stopTemp} ${tDamp} z 1.0 1.0 10.0
+
+fix             3 all plumed   plumedfile  plumed.dat     outfile p.log
+
+restart         10000  restart
+dump            traj_xyz all custom 5000 out.lammpstrj element x y z
+dump_modify     traj_xyz element H O sort id
+
+run ${numSteps}
+#fix 1 all ipi driver.01 32346 unix
+#run 10000000
+#
+write_restart ${nameRestartEnd}                                                         # write final configuration (binary)
+###############################################################################
+# CLEAN UP
+###############################################################################
+#undump XYZ
+#unfix AVE_TD
+#unfix INT
+###############################################################################

@@ -1,0 +1,9 @@
+This folder contains neccesary files for running thermodynamic integration simulations from the neural network potential to the MBPOL water potential.
+
+Steps:
+
+* Copy the files from ../NN-potential/
+
+* Make a few directories. Substitute the weight factor lambda (AW) between the two potential.  HW=1.0-AW
+
+* Run at different values of lambda.

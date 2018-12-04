@@ -1,0 +1,35 @@
+MBPol potential -- water 
+
+temperature             300.0
+pressure                0.001
+steps                   50000000
+timestep                0.0002 ps
+
+ipi unix:AW-dlpoly-SYS:32848
+
+
+# SYSTEM CUTOFFS
+cutoff           8.00        ! electrostatics cutoff
+rvdw             8.00        ! nonbonded cutoff
+delr width       0.50        ! for Verlet list
+
+vmbpol             ! sets gamma, smear functions/factors, DMS, etc
+
+# EWALD
+ewald sum 0.45 12 12 12      ! alpha & k-vectors for bulk simulations 
+
+# POLARIZABLE SIMULATIONS.
+polarizability           ! define a polarizable model
+iteration 1.0e-8         ! iterative (self-consistent) algorithm 
+
+#***********
+#Ignore the following keywords. Do not use the following keywords to set 
+# the temperature, etc of the system. You must
+# specify them in i-pi input file. 
+
+# CLOSING FILES
+job time           1.0D+9
+close time         1.0D+2
+
+finish
+

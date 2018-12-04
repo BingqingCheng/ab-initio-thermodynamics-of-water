@@ -1,0 +1,56 @@
+<simulation verbosity="low">
+    <output prefix="ih-100K-AW">
+        <properties stride="1" filename="out">  [ step, time{picosecond}, conserved, temperature{kelvin}, potential, pot_component_raw(0), pot_component_raw(1), pressure_md{megapascal}] </properties>
+        <trajectory filename="pos" stride="1000" > positions </trajectory>
+   </output>
+
+   <total_steps> 2000000 </total_steps>
+   <prng> <seed> 82342 </seed> </prng>
+
+   <ffsocket name="lmp" mode="unix" pbc="true">
+        <address> ih-25K-AW </address>
+   </ffsocket>
+   <ffdebye name="debye">
+        <hessian shape="(6912,6912)" mode="file"> ih.hess </hessian>
+        <x_reference mode="file" units="angstrom"> ih-ref.xyz  </x_reference>
+   </ffdebye>
+
+    <system>
+    <initialize nbeads="1">
+            <file mode="xyz" units="angstrom"> min-Ih.xyz </file>
+            <cell mode="abc" units="angstrom"> [ 3.12723057e+01, 2.91762933e+01, 2.70615120e+01 ] </cell>
+        <velocities mode="thermal" units="kelvin"> 50 </velocities>
+    </initialize>
+    <forces>
+        <force forcefield="lmp" weight="AW"> </force>
+        <force forcefield="debye" weight="HW"> </force>
+    </forces>
+    <motion mode="dynamics">
+	        <dynamics mode="nvt">
+             <thermostat mode='multi'>
+             <thermostat mode='svr'>
+                 <tau units="femtosecond"> 10 </tau>
+               </thermostat>
+               <thermostat mode='gle'>
+    <A shape='(7,7)'>
+      [   1.226599893370e-4,    1.567458130703e-3,    1.588030342400e-4,    2.300493202488e-4,    7.804106941313e-5,   -3.043402684666e-6,   -4.843592841660e-5,
+   4.739174872537e-5,    6.459430192451e-3,   -4.692891525748e-3,    7.364178202614e-4,    5.375649237654e-4,   -1.269086843854e-4,    2.401009705214e-4,
+   2.300120978533e-4,    4.692891525748e-3,    2.160053383645e-3,    2.032316012531e-3,   -7.284382260959e-5,    4.630048216488e-4,   -9.597776651421e-4,
+  -2.353078533391e-4,   -7.364178202614e-4,   -2.032316012531e-3,    2.129325549873e-5,   -6.049295898016e-6,    5.520057596633e-5,    7.429259765872e-5,
+  -7.808730774317e-5,   -5.375649237654e-4,    7.284382260959e-5,    6.049295898016e-6,    1.122054142427e-7,   -1.827931711785e-5,   -6.330789193746e-6,
+   3.039775780392e-6,    1.269086843854e-4,   -4.630048216488e-4,   -5.520057596633e-5,    1.827931711785e-5,    3.581385385335e-8,    4.193211166693e-5,
+   4.843790215100e-5,   -2.401009705214e-4,    9.597776651421e-4,   -7.429259765872e-5,    6.330789193746e-6,   -4.193211166693e-5,   2.527962410680e-12
+     ]
+    </A>
+  </thermostat>
+  </thermostat>
+            <timestep units="femtosecond"> 0.5 </timestep>
+        </dynamics>
+        <fixcom> True </fixcom>
+    </motion>
+    <ensemble>
+        <temperature units="kelvin"> 25 </temperature>
+    </ensemble>
+    </system>
+
+</simulation>

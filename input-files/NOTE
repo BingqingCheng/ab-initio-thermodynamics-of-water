@@ -1,0 +1,13 @@
+A whole set of input files for running
+
+* path-integral molecular dynamics simulations   ./pimd/
+
+* Free energy estimation of an ice system using thermodynamic integration method using the NN potential ./NN-TI/
+
+* revPBE0-D3 DFT calculations using the CP2K code ./cp2k-input/
+
+* compute the chemical potential difference between ice and liquid water using the interface pinning method ./interface-pinning/
+
+* Thermodynamic integration between the MBPOL water potential and the neural network potential ./mbpol-TI/
+
+* a sample python data analysis notebook ./data-analysis/

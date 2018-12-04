@@ -1,0 +1,26 @@
+MBPOL H2O [CONTROL file must include 'vttm4']
+units kcal
+molecular types 2
+H2O
+nummols   768 
+atoms      3
+OW       15.9949    0.000000    1.310       1.310       1
+HW        1.0079    0.500000    0.294       0.294       1
+HW        1.0079    0.500000    0.294       0.294       1
+bonds            3
+mors    1    2  120.876713 0.951960716 2.587949758
+mors    1    3  120.876713 0.951960716 2.587949758
+expo    2    3  15319.9337 12.66426998
+angles     1
+schw    2    1    3
+finish
+M site
+nummols    768
+atoms      1
+MW        0.0000     -1.000000  1.310       0.0         1
+finish
+vdw        3
+HW      HW      tt68 20.09358600 9.406475170 0.0         1.0
+OW      HW      tt68 83.49556670 9.775202425 0.0         1.0
+OW      OW      tt68 237.3212214 9.295485815 0.0         1.0
+close

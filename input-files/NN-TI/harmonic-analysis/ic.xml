@@ -1,0 +1,24 @@
+<simulation mode="static" verbosity="low">
+   <total_steps> 5000000 </total_steps>
+   <prng> <seed> 32342 </seed> </prng>
+   <ffsocket name="lmp" mode="unix" pbc="true">
+        <address> nid01964-nn-ic </address>
+   </ffsocket>
+   <system>
+        <initialize nbeads="1"> 
+            <file mode="xyz" units="angstrom"> min-Ic.xyz </file>
+            <cell mode="abc" units="angstrom"> [  3.82640241e+01, 2.53464983e+01, 2.54970280e+01 ] </cell>
+        </initialize>
+        <forces>
+            <force forcefield="lmp"> </force>
+        </forces>
+        <motion mode="vibrations">
+            <vibrations mode="fd">
+                <pos_shift> 0.02 </pos_shift>
+                <energy_shift> 0.02 </energy_shift>
+                <prefix> ic </prefix>
+                <asr> crystal </asr>
+            </vibrations>
+        </motion>
+    </system>
+</simulation>
