@@ -8,6 +8,8 @@ Steps:
 
 * Substite the string "ttttt" with desired temperature.
 
+* Scale the cell so that the lattice constant of ice is the equilibrium value at the specified temperature.
+
 * Run 
 lmp < in.lmp 
 this simulation also dumps out restart files, which contains the coordinates solid-liquid coesistent systems.
